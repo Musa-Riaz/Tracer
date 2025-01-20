@@ -106,6 +106,29 @@ const Navbar = () => {
     }
   };
 
+  const handleLogOut = async ()=> {
+    try{
+      const res = await axios.get("http://localhost:3000/app/v1/auth/signout", {withCredentials: true});
+      if(res.data.success){
+        toast({
+          title: "Success",
+          description: "User has been logged out successfully",
+          variant: "default",
+        });
+        dispatch(setAuth(false));
+        dispatch(setUser(""));
+      }
+    }
+    catch(err){
+      console.log(err);
+      toast({
+        title: "Error",
+        description: "There was a problem logging out",
+        variant: "destructive",
+      });
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -118,7 +141,7 @@ const Navbar = () => {
         {user?.isAuthorized ? (
           <div className="flex items-center gap-x-4">
             <p>{user.username}</p>
-            <Button>Logout</Button>
+            <Button onClick={handleLogOut}>Logout</Button>
           </div>
         ) : (
           <>
